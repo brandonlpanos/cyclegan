@@ -11,3 +11,5 @@ import torch.nn as nn
 # Use leaky ReLUs with a slope of 0.2. 
 # The discriminator architecture is: C64-C128-C256-C512
 #-----------------------------------------------------------------------------------------------------------------------------
+
+.
