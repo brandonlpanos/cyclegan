@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 
 
-def create_loaders(test_percent=0.8, batch_size=64):
+def create_loaders(test_percent=0.8, batch_size=64, sdo_channels=['304'], iris_channel='1400'):
     """
     Creates data loaders for training and testing based on the provided parameters.
     Args:
@@ -34,16 +34,16 @@ def create_loaders(test_percent=0.8, batch_size=64):
 
     # Create the training and testing datasets
     train_dataset = AIAIRISDataset(
-        sdo_channels=['304'], iris_channel='1400', obs_list=train_obs_list)
+        sdo_channels=sdo_channels, iris_channel=iris_channel, obs_list=train_obs_list)
     test_dataset = AIAIRISDataset(
-        sdo_channels=['304'], iris_channel='1400', obs_list=test_obs_list)
+        sdo_channels=sdo_channels, iris_channel=iris_channel, obs_list=test_obs_list)
 
     # Create the training and testing data loaders
     train_loader = DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-    return train_loader, test_loader, train_dataset.iris_paths, train_dataset.sdo_paths, test_dataset.iris_paths, test_dataset.sdo_paths
+    return train_loader, test_loader
 
 
 class AIAIRISDataset(Dataset):
