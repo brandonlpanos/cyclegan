@@ -11,30 +11,3 @@ import torch.nn as nn
 # Use leaky ReLUs with a slope of 0.2. 
 # The discriminator architecture is: C64-C128-C256-C512
 #-----------------------------------------------------------------------------------------------------------------------------
-
-
-class Discriminator(torch.nn.Module):
-    '''Discriminator network for PatchGAN'''
-    def __init__(self, in_channels=3, num_filters=64, num_layers=3):
-        super(Discriminator, self).__init__()
-        layers = []
-
-        # C64
-        layers.append(nn.Conv2d(in_channels, num_filters, kernel_size=4, stride=2))
-        layers += [nn.LeakyReLU(0.2)]
-
-        # C128-C256-C512
-        for _ in range(num_layers-1):
-            layers.append(nn.Conv2d(num_filters, num_filters*2, kernel_size=4, stride=2))
-            layers += [nn.LeakyReLU(0.2)]
-            layers += [nn.InstanceNorm2d(num_filters*2)]
-            num_filters *= 2
-
-        # output 1 channel prediction map
-        layers.append(nn.Conv2d(num_filters, 1, kernel_size=4, stride=1))
-
-        self.discriminator = torch.nn.Sequential(*layers)
-
-    def forward(self, x):
-        '''Forward pass'''
-        return self.discriminator(x)
