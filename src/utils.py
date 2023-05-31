@@ -14,6 +14,7 @@ def quick_look_gen(images, clr='k', dim=16, savename=None):
     Returns:
         None
     """
+    images = np.squeeze(images)
     rcParams['font.family'] = 'serif'
     rcParams['font.size'] = 17
     fig = plt.figure(figsize=(12, 12))
