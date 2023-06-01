@@ -11,6 +11,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
+import torch.nn.functional as F
 
 class ResidualBlock(nn.Module):
     def __init__(self, in_features):
@@ -34,7 +35,8 @@ class Generator(nn.Module):
     def __init__(self, input_shape, num_residual_block):
         super(Generator, self).__init__()
         
-        channels = input_shape[0]
+        self.input_shape = input_shape
+        channels = self.input_shape[0]
         
         # Initial Convolution Block
         out_features = 64
@@ -83,5 +85,10 @@ class Generator(nn.Module):
         self.model = nn.Sequential(*model) 
         
     def forward(self, x):
-        return self.model(x)
-
+        x = self.model(x)
+        # Resize to input shape. 
+        # Sometimes the output of the generator is not the same size as the input by a few pixels.
+        # We assume it is fine to resize the output. F.interpolate is part of the computational graph.
+        if x.shape != self.input_shape:
+            x = F.interpolate(x, size=self.input_shape[2:], mode='bilinear', align_corners=False)
+        return x
