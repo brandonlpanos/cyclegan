@@ -77,10 +77,6 @@ def make_dir(directory):
 """
 Required directory Creation
 """
-"""cycleGAN_dir='/content/gdrive/My Drive/DATA690_Project_CYCLEGAN'
-make_dir(cycleGAN_dir)
-
-os.chdir('/content/gdrive/My Drive/DATA690_Project_CYCLEGAN')"""
 
 
 results_dir = config.result_dir
@@ -179,7 +175,7 @@ test_loader_Y = DataLoader(dataset=test_data_Y, batch_size=1, shuffle=False)
 ""# In[6]:
 
 
-train_real_H = train_data_X.__getitem__(525).unsqueeze(0)
+train_real_H = train_data_X.__getitem__(625).unsqueeze(0)
 train_real_Z = train_data_Y.__getitem__(91).unsqueeze(0)
 
 val_real_H = test_data_X.__getitem__(78).unsqueeze(0)

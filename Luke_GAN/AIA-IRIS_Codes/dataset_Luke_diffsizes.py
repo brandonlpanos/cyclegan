@@ -7,7 +7,7 @@ from torchvision import transforms
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import RobustScaler
-
+import cv2 as cv
 
 def create_loaders():
     train_dataset = AIAIRISDataset('train')
@@ -61,20 +61,17 @@ class AIAIRISDataset(Dataset):
         
         
         image_file = os.path.join(self.image_path, self.image_filename_lst[idx])
-        out_im = np.load(image_file)
+        out_im = np.load(image_file).astype(np.uint8)
+        
+        #out_im = np.float32(out_im)
         
         #print(image.shape)
         
         
-        if self.image_type == 'iris':
-            out_im = self.removeout(out_im,1)
+        #grayimg = cv.cvtColor(out_im, cv.COLOR_BGR2GRAY)
             
-        elif self.image_type == 'aia':
-            out_im = self.removeout(out_im,10)
         
-        
-        
-        norm_transform = transforms.Compose([
+        norm_iris_transform = transforms.Compose([
             transforms.Resize(size=286),
             transforms.CenterCrop(256),
             NormalizeMinMax(),
@@ -85,12 +82,82 @@ class AIAIRISDataset(Dataset):
 
         ])
         
+        
+        
+        norm_sdo_transform = transforms.Compose([
+            transforms.Resize(size=286),
+            transforms.CenterCrop(256),
+            NormalizeMinMax(),
+            transforms.RandomHorizontalFlip(0.4),
+            transforms.RandomVerticalFlip(0.4),
+            transforms.ToTensor(),
+            #transforms.Normalize(mean=(0.5), std=(0.5)),
+
+        ])
+        
+        
+        if self.image_type == 'iris':
+            #out_im = self.removeout(out_im,1)
+            
+            
+            """hist,bins = np.histogram(out_im.flatten(),256,[0,256])
+            cdf = hist.cumsum()
+            cdf_normalized = cdf * float(hist.max()) / cdf.max()
+            plt.plot(cdf_normalized, color = 'b')
+            plt.hist(out_im.flatten(),256,[0,256], color = 'r')
+            plt.xlim([0,256])
+            plt.legend(('cdf','histogram iris'), loc = 'upper left')
+            plt.show()"""
+            
+            
+            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+            equ = clahe.apply(out_im)
+            
+            #equ = cv.equalizeHist(out_im)
+            
+            """hist,bins = np.histogram(equ.flatten(),256,[0,256])
+            cdf = hist.cumsum()
+            cdf_normalized = cdf * float(hist.max()) / cdf.max()
+            plt.plot(cdf_normalized, color = 'b')
+            plt.hist(equ.flatten(),256,[0,256], color = 'r')
+            plt.xlim([0,256])
+            plt.legend(('cdf','histogram iris'), loc = 'upper left')
+            plt.show()"""
+            
+            out_im = Image.fromarray(equ)
+            augmented_im = norm_iris_transform(out_im)
+
+            
+        elif self.image_type == 'aia':
+            #out_im = self.removeout(out_im,100)
+            """hist,bins = np.histogram(out_im.flatten(),256,[0,256])
+            cdf = hist.cumsum()
+            cdf_normalized = cdf * float(hist.max()) / cdf.max()
+            plt.plot(cdf_normalized, color = 'b')
+            plt.hist(out_im.flatten(),256,[0,256], color = 'r')
+            plt.xlim([0,256])
+            plt.legend(('cdf','histogram aia'), loc = 'upper left')
+            plt.show()"""
+            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+            equ = clahe.apply(out_im)
+            
+           # equ = cv.equalizeHist(out_im)
+            
+            """hist,bins = np.histogram(equ.flatten(),256,[0,256])
+            cdf = hist.cumsum()
+            cdf_normalized = cdf * float(hist.max()) / cdf.max()
+            plt.plot(cdf_normalized, color = 'b')
+            plt.hist(equ.flatten(),256,[0,256], color = 'r')
+            plt.xlim([0,256])
+            plt.legend(('cdf','histogram aia'), loc = 'upper left')
+            plt.show()"""
+            out_im = Image.fromarray(equ)
+            augmented_im = norm_sdo_transform(out_im)
+            
+            
+        
         #print("out size: ",out_im.shape)
-        
-        out_im = Image.fromarray(out_im)#.dtype(float)
-        
-        
-        augmented_im = norm_transform(out_im)
+
 
         #print(augmented_im.shape)
         

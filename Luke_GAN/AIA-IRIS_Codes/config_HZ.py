@@ -16,7 +16,7 @@ home_dir = 'C:/Users/lukem/OneDrive - Northumbria University - Production Azure 
 
 data_dir='AIAtoIRIS/Single_Bands/Data/'
 
-result_dir = 'AIAtoIRIS/Single_Bands/Results2/'
+result_dir = 'AIAtoIRIS/Single_Bands/Results3/'
 
 """
 Epochs
