@@ -75,8 +75,8 @@ class AIAIRISDataset(Dataset):
             
         
         norm_iris_transform = transforms.Compose([
-            #transforms.Resize(size=286),
-            #transforms.CenterCrop(256),
+            transforms.Resize(size=532),
+            transforms.CenterCrop(512),
             NormalizeMinMax(),
             transforms.RandomHorizontalFlip(0.4),
             transforms.RandomVerticalFlip(0.4),
@@ -88,8 +88,8 @@ class AIAIRISDataset(Dataset):
         
         
         norm_sdo_transform = transforms.Compose([
-            #transforms.Resize(size=286),
-            #transforms.CenterCrop(256),
+            transforms.Resize(size=286),
+            transforms.CenterCrop(256),
             NormalizeMinMax(),
             transforms.RandomHorizontalFlip(0.4),
             transforms.RandomVerticalFlip(0.4),
