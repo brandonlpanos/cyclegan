@@ -34,7 +34,7 @@ from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 from tqdm.autonotebook import tqdm
 from torchsummary import summary
-from dataset_Luke_diffsizes_types import AIAIRISDataset
+from dataset_Luke_diffsizes import AIAIRISDataset
 from generator_HZ import Generator
 from discriminator_HZ import Discriminator
 import config_HZ as config
