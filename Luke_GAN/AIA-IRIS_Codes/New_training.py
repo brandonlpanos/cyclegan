@@ -152,22 +152,22 @@ transform = config.transform
 """
 Train Data Loader 
 """
-train_data_X = AIAIRISDataset(image_dir=data_dir, is_train=True, image_type='aia', transform=transform)
+train_data_X = AIAIRISDataset(image_dir=data_dir, is_train=True, image_type='aia')
                         
 train_loader_X = DataLoader(dataset=train_data_X, batch_size=1, shuffle=True)
 
-train_data_Y = AIAIRISDataset(image_dir=data_dir, is_train=True, image_type='iris', transform=transform)
+train_data_Y = AIAIRISDataset(image_dir=data_dir, is_train=True, image_type='iris')
                         
 train_loader_Y = DataLoader(dataset=train_data_Y, batch_size=1, shuffle=True)
 
 """
 Test Data Loader
 """
-test_data_X = AIAIRISDataset(image_dir=data_dir, is_train=False, image_type='aia', transform=transform)
+test_data_X = AIAIRISDataset(image_dir=data_dir, is_train=False, image_type='aia')
                         
 test_loader_X = DataLoader(dataset=test_data_X, batch_size=1, shuffle=False)
 
-test_data_Y = AIAIRISDataset(image_dir=data_dir, is_train=False, image_type='iris', transform=transform)
+test_data_Y = AIAIRISDataset(image_dir=data_dir, is_train=False, image_type='iris')
                         
 test_loader_Y = DataLoader(dataset=test_data_Y, batch_size=1, shuffle=False)
 
@@ -175,7 +175,7 @@ test_loader_Y = DataLoader(dataset=test_data_Y, batch_size=1, shuffle=False)
 ""# In[6]:
 
 
-train_real_H = train_data_X.__getitem__(625).unsqueeze(0)
+train_real_H = train_data_X.__getitem__(525).unsqueeze(0)
 train_real_Z = train_data_Y.__getitem__(91).unsqueeze(0)
 
 val_real_H = test_data_X.__getitem__(78).unsqueeze(0)
@@ -188,7 +188,7 @@ f, axarr = plt.subplots(2,1, figsize=(20,10))
 
 for i in range(2):
         if i==0:
-            x = val_real_H
+            x = train_real_H
             s='aia'
         else :
             x = val_real_Z
