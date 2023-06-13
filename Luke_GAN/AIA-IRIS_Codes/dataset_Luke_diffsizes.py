@@ -19,7 +19,7 @@ def create_loaders():
 
 
 class AIAIRISDataset(Dataset):
-    def __init__(self, image_dir, is_train, image_type,transform):
+    def __init__(self, image_dir, is_train, image_type):
         super(AIAIRISDataset, self).__init__()
         
         self.train_or_test='train' if is_train else 'test'
@@ -27,7 +27,6 @@ class AIAIRISDataset(Dataset):
         self.image_type=image_type
         self.image_path = os.path.join(self.image_dir,'{}'.format(self.image_type)+'_'+self.train_or_test)
         self.image_filename_lst = [x for x in sorted(os.listdir(self.image_path))]
-        self.transform = transform[self.train_or_test]
 
         
     def __len__(self):
@@ -61,7 +60,11 @@ class AIAIRISDataset(Dataset):
         
         
         image_file = os.path.join(self.image_path, self.image_filename_lst[idx])
-        out_im = np.load(image_file).astype(np.uint8)
+        out_im = np.load(image_file).astype(np.uint16)
+        
+        
+
+        
         
         #out_im = np.float32(out_im)
         
@@ -72,8 +75,8 @@ class AIAIRISDataset(Dataset):
             
         
         norm_iris_transform = transforms.Compose([
-            transforms.Resize(size=286),
-            transforms.CenterCrop(256),
+            #transforms.Resize(size=286),
+            #transforms.CenterCrop(256),
             NormalizeMinMax(),
             transforms.RandomHorizontalFlip(0.4),
             transforms.RandomVerticalFlip(0.4),
@@ -85,8 +88,8 @@ class AIAIRISDataset(Dataset):
         
         
         norm_sdo_transform = transforms.Compose([
-            transforms.Resize(size=286),
-            transforms.CenterCrop(256),
+            #transforms.Resize(size=286),
+            #transforms.CenterCrop(256),
             NormalizeMinMax(),
             transforms.RandomHorizontalFlip(0.4),
             transforms.RandomVerticalFlip(0.4),
@@ -115,6 +118,7 @@ class AIAIRISDataset(Dataset):
             
             #equ = cv.equalizeHist(out_im)
             
+            
             """hist,bins = np.histogram(equ.flatten(),256,[0,256])
             cdf = hist.cumsum()
             cdf_normalized = cdf * float(hist.max()) / cdf.max()
@@ -123,6 +127,8 @@ class AIAIRISDataset(Dataset):
             plt.xlim([0,256])
             plt.legend(('cdf','histogram iris'), loc = 'upper left')
             plt.show()"""
+            
+            equ = equ.astype(np.float32)
             
             out_im = Image.fromarray(equ)
             augmented_im = norm_iris_transform(out_im)
@@ -138,6 +144,7 @@ class AIAIRISDataset(Dataset):
             plt.xlim([0,256])
             plt.legend(('cdf','histogram aia'), loc = 'upper left')
             plt.show()"""
+            
             clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
             equ = clahe.apply(out_im)
             
@@ -151,6 +158,9 @@ class AIAIRISDataset(Dataset):
             plt.xlim([0,256])
             plt.legend(('cdf','histogram aia'), loc = 'upper left')
             plt.show()"""
+            
+            equ = equ.astype(np.float32)
+            
             out_im = Image.fromarray(equ)
             augmented_im = norm_sdo_transform(out_im)
             
