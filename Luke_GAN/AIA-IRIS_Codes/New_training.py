@@ -34,7 +34,7 @@ from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 from tqdm.autonotebook import tqdm
 from torchsummary import summary
-from dataset_Luke_diffsizes import AIAIRISDataset
+from dataset_Luke_diffsizes_types import AIAIRISDataset
 from generator_HZ import Generator
 from discriminator_HZ import Discriminator
 import config_HZ as config
@@ -175,7 +175,7 @@ test_loader_Y = DataLoader(dataset=test_data_Y, batch_size=1, shuffle=False)
 ""# In[6]:
 
 
-train_real_H = train_data_X.__getitem__(525).unsqueeze(0)
+train_real_H = train_data_X.__getitem__(169).unsqueeze(0)
 train_real_Z = train_data_Y.__getitem__(91).unsqueeze(0)
 
 val_real_H = test_data_X.__getitem__(78).unsqueeze(0)
@@ -191,7 +191,7 @@ for i in range(2):
             x = train_real_H
             s='aia'
         else :
-            x = val_real_Z
+            x = train_real_Z
             s='iris'
 
         grid = torchvision.utils.make_grid(x.clamp(min=-1, max=1), scale_each=True, normalize=True)

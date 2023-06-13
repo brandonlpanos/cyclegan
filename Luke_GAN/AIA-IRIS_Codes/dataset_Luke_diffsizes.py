@@ -60,7 +60,7 @@ class AIAIRISDataset(Dataset):
         
         
         image_file = os.path.join(self.image_path, self.image_filename_lst[idx])
-        out_im = np.load(image_file).astype(np.uint16)
+        #out_im = np.load(image_file).astype(np.uint16)
         
         
 
@@ -75,8 +75,8 @@ class AIAIRISDataset(Dataset):
             
         
         norm_iris_transform = transforms.Compose([
-            transforms.Resize(size=532),
-            transforms.CenterCrop(512),
+            transforms.Resize(size=286),
+            transforms.CenterCrop(256),
             NormalizeMinMax(),
             transforms.RandomHorizontalFlip(0.4),
             transforms.RandomVerticalFlip(0.4),
@@ -101,7 +101,7 @@ class AIAIRISDataset(Dataset):
         
         if self.image_type == 'iris':
             #out_im = self.removeout(out_im,1)
-            
+            out_im = np.load(image_file).astype(np.uint8)
             
             """hist,bins = np.histogram(out_im.flatten(),256,[0,256])
             cdf = hist.cumsum()
@@ -113,7 +113,7 @@ class AIAIRISDataset(Dataset):
             plt.show()"""
             
             
-            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(50,50))
             equ = clahe.apply(out_im)
             
             #equ = cv.equalizeHist(out_im)
@@ -135,6 +135,11 @@ class AIAIRISDataset(Dataset):
 
             
         elif self.image_type == 'aia':
+            
+            out_im = np.load(image_file)#.astype(np.uint8)
+            
+            out_im = ((out_im - out_im.min()) * (1/(out_im.max() - out_im.min()) * 255)).astype('uint8')
+            
             #out_im = self.removeout(out_im,100)
             """hist,bins = np.histogram(out_im.flatten(),256,[0,256])
             cdf = hist.cumsum()
@@ -145,7 +150,7 @@ class AIAIRISDataset(Dataset):
             plt.legend(('cdf','histogram aia'), loc = 'upper left')
             plt.show()"""
             
-            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(50,50))
             equ = clahe.apply(out_im)
             
            # equ = cv.equalizeHist(out_im)
