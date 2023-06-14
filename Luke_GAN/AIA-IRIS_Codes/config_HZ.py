@@ -12,17 +12,17 @@ from torchvision import transforms
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-home_dir = 'C:/Users/lukem/OneDrive - Northumbria University - Production Azure AD/Documents/PhD Research/Bern/GAN'
+home_dir = 'C:/Users/lukem/OneDrive - Northumbria University - Production Azure AD/Documents/PhD Research/Bern/GAN/AIAtoIRIS'
 
-data_dir='AIAtoIRIS/Single_Bands/Data/'
+data_dir='Single_Bands/1800_data/'
 
-result_dir = 'AIAtoIRIS/Single_Bands/Results3/'
+result_dir = 'Single_Bands/Results2/'
 
 """
 Epochs
 """
-epochs=200
-decay_epoch=100
+epochs=100
+decay_epoch=50
 epoch_offset=1
 """
 Size of feature maps in generator. Set the value as per DCGAN.
@@ -51,12 +51,12 @@ in_channels = 1
 
 
 transform = {
-             'train': transforms.Compose([transforms.Resize(size=286),
+             'iris': transforms.Compose([transforms.Resize(size=286),
                                           transforms.CenterCrop(256),
                                           transforms.RandomHorizontalFlip(),
                                           transforms.ToTensor(),
                                           transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))]),
-             'test': transforms.Compose([transforms.Resize(size=256),
+             'sdo': transforms.Compose([transforms.Resize(size=256),
                                          transforms.ToTensor(),
                                          transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))])
              }
