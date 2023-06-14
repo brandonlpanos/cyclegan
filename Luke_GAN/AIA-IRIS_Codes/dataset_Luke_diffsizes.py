@@ -113,7 +113,7 @@ class AIAIRISDataset(Dataset):
             plt.show()"""
             
             
-            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(50,50))
+            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
             equ = clahe.apply(out_im)
             
             #equ = cv.equalizeHist(out_im)
@@ -128,7 +128,7 @@ class AIAIRISDataset(Dataset):
             plt.legend(('cdf','histogram iris'), loc = 'upper left')
             plt.show()"""
             
-            equ = equ.astype(np.float32)
+            #equ = equ.astype(np.float32)
             
             out_im = Image.fromarray(equ)
             augmented_im = norm_iris_transform(out_im)
@@ -136,7 +136,7 @@ class AIAIRISDataset(Dataset):
             
         elif self.image_type == 'aia':
             
-            out_im = np.load(image_file)#.astype(np.uint8)
+            out_im = np.load(image_file)#.astype(np.uint16)
             
             out_im = ((out_im - out_im.min()) * (1/(out_im.max() - out_im.min()) * 255)).astype('uint8')
             
@@ -150,10 +150,10 @@ class AIAIRISDataset(Dataset):
             plt.legend(('cdf','histogram aia'), loc = 'upper left')
             plt.show()"""
             
-            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(50,50))
+            clahe = cv.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
             equ = clahe.apply(out_im)
             
-           # equ = cv.equalizeHist(out_im)
+            #equ = cv.equalizeHist(out_im)
             
             """hist,bins = np.histogram(equ.flatten(),256,[0,256])
             cdf = hist.cumsum()
@@ -164,7 +164,7 @@ class AIAIRISDataset(Dataset):
             plt.legend(('cdf','histogram aia'), loc = 'upper left')
             plt.show()"""
             
-            equ = equ.astype(np.float32)
+            #equ = equ.astype(np.float16)
             
             out_im = Image.fromarray(equ)
             augmented_im = norm_sdo_transform(out_im)
@@ -178,9 +178,6 @@ class AIAIRISDataset(Dataset):
         
         return augmented_im
         
-
-
-        #return{'A': augmented_iris_im, 'B':augmented_sdo_im, 'C':tens_iris_im, 'D':tens_sdo_im}
     
 
 
@@ -228,6 +225,9 @@ class NormalizeMinMax(torch.nn.Module):
         # Normalize image to range [-1, 1]
         normalized_image = (image - min_value) / (max_value - min_value)
         normalized_image = (normalized_image * 2) - 1
+        
+        
+        
         
         #normalized_image = torch.clamp(normalized_image, max =1,min = -1)
         
