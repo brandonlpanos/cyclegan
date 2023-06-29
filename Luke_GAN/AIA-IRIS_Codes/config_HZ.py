@@ -12,17 +12,19 @@ from torchvision import transforms
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-home_dir = 'C:/Users/lukem/OneDrive - Northumbria University - Production Azure AD/Documents/PhD Research/Bern/GAN/AIAtoIRIS'
+print(device)
 
-data_dir='Single_Bands/1800_data/'
+home_dir = '/home/osw_w22038792/Bern'
 
-result_dir = 'Single_Bands/Results2/'
+data_dir='1800_data/'
+
+result_dir = 'Results1800_NAM/'
 
 """
 Epochs
 """
 epochs=100
-decay_epoch=50
+decay_epoch=80
 epoch_offset=1
 """
 Size of feature maps in generator. Set the value as per DCGAN.
@@ -35,16 +37,16 @@ ndf=64
 """
 Number of residual blocks
 """ 
-num_residual_blocks=9
+num_residual_blocks=6
 
 """
 Generator learning rate  
 """ 
-lr_G=0.0002
+lr_G=0.00002
 """
 Discriminator learning rate
 """ 
-lr_D=0.0002
+lr_D=0.00002
 
 in_channels = 1
 
@@ -59,4 +61,14 @@ transform = {
              'sdo': transforms.Compose([transforms.Resize(size=256),
                                          transforms.ToTensor(),
                                          transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))])
-             }
+}
+
+
+
+tilegridsize = (8,8)
+
+patchsize = 4
+
+cycleloss = 7
+
+             
