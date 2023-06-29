@@ -7,10 +7,11 @@ Created on Thu Jun  8 00:22:30 2023
 
 from NetworkBlocks import Conv
 import torch.nn as nn
+import config_HZ as config
 
 
 class Discriminator(nn.Module):
-    def __init__(self,in_channels,n_filter,out_channels,kernel_size=4):
+    def __init__(self,in_channels,n_filter,out_channels,kernel_size=config.patchsize):
         super().__init__()
         """
         C64
